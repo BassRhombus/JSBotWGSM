@@ -4,3 +4,13 @@ C:\Users\bfjsu\Desktop\Tools\Bots\Test Bots\JSBotWGSM\obj\Debug\net6.0\DiscordBo
 C:\Users\bfjsu\Desktop\Tools\Bots\Test Bots\JSBotWGSM\obj\Debug\net6.0\DiscordBot.AssemblyInfo.cs
 C:\Users\bfjsu\Desktop\Tools\Bots\Test Bots\JSBotWGSM\obj\Debug\net6.0\DiscordBot.csproj.CoreCompileInputs.cache
 C:\Users\bfjsu\Desktop\Tools\Bots\Test Bots\JSBotWGSM\obj\Debug\net6.0\DiscordBot.sourcelink.json
+C:\Users\bfjsu\Desktop\Tools\Bots\Test Bots\JSBotWGSM\bin\Debug\net6.0\DiscordBot.deps.json
+C:\Users\bfjsu\Desktop\Tools\Bots\Test Bots\JSBotWGSM\bin\Debug\net6.0\DiscordBot.dll
+C:\Users\bfjsu\Desktop\Tools\Bots\Test Bots\JSBotWGSM\bin\Debug\net6.0\DiscordBot.pdb
+C:\Users\bfjsu\Desktop\Tools\Bots\Test Bots\JSBotWGSM\bin\Debug\net6.0\WindowsGSM.exe
+C:\Users\bfjsu\Desktop\Tools\Bots\Test Bots\JSBotWGSM\bin\Debug\net6.0\MahApps.Metro.dll
+C:\Users\bfjsu\Desktop\Tools\Bots\Test Bots\JSBotWGSM\obj\Debug\net6.0\DiscordBot.csproj.CopyComplete
+C:\Users\bfjsu\Desktop\Tools\Bots\Test Bots\JSBotWGSM\obj\Debug\net6.0\DiscordBot.dll
+C:\Users\bfjsu\Desktop\Tools\Bots\Test Bots\JSBotWGSM\obj\Debug\net6.0\refint\DiscordBot.dll
+C:\Users\bfjsu\Desktop\Tools\Bots\Test Bots\JSBotWGSM\obj\Debug\net6.0\DiscordBot.pdb
+C:\Users\bfjsu\Desktop\Tools\Bots\Test Bots\JSBotWGSM\obj\Debug\net6.0\ref\DiscordBot.dll

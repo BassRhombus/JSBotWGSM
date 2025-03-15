@@ -27,7 +27,7 @@ namespace WindowsGSM.Plugins
         // - Standard Constructor and Properties
         public DiscordBot(ServerConfig serverData) : base(serverData) => base.serverData = _serverData = serverData;
         private readonly ServerConfig _serverData;
-        public string Error, Notice;
+        public new string Error, Notice;
 
         // - Game server Fixed variables
         public override string StartPath => "node";
@@ -66,7 +66,7 @@ namespace WindowsGSM.Plugins
             }
 
             // Check if bot.js exists, if not try to pull from GitHub
-            if (!File.Exists(fullPath) && !string.IsNullOrEmpty(_serverData.ServerConfig["GitHubRepo"]))
+            if (!File.Exists(fullPath) && !string.IsNullOrEmpty(_serverData.GetType().GetProperty("GitHubRepo")?.GetValue(_serverData)?.ToString()))
             {
                 await InstallFromGitHub();
             }
@@ -111,7 +111,7 @@ namespace WindowsGSM.Plugins
                 StartInfo =
                 {
                     FileName = StartPath,
-                    Arguments = $"bot.js {_serverData.ServerConfig["Additional"]}",
+                    Arguments = $"bot.js {_serverData.GetType().GetProperty("Additional")?.GetValue(_serverData)}",
                     WorkingDirectory = path,
                     WindowStyle = ProcessWindowStyle.Hidden,
                     UseShellExecute = false,
@@ -136,19 +136,35 @@ namespace WindowsGSM.Plugins
 
         public async Task<bool> ShouldUpdate()
         {
-            if (!bool.Parse(_serverData.ServerConfig["AutoUpdateOnRestart"]))
+            bool autoUpdate = false;
+            var autoUpdateProp = _serverData.GetType().GetProperty("AutoUpdateOnRestart");
+            if (autoUpdateProp != null)
+            {
+                var autoUpdateValue = autoUpdateProp.GetValue(_serverData)?.ToString();
+                bool.TryParse(autoUpdateValue, out autoUpdate);
+            }
+            
+            if (!autoUpdate)
                 return false;
 
-            return !string.IsNullOrEmpty(_serverData.ServerConfig["GitHubRepo"]);
+            var repoProp = _serverData.GetType().GetProperty("GitHubRepo");
+            return repoProp != null && !string.IsNullOrEmpty(repoProp.GetValue(_serverData)?.ToString());
         }
 
         public async Task InstallFromGitHub()
         {
             string path = ServerPath.GetServersServerFiles(_serverData.ServerID);
-            string username = _serverData.ServerConfig["GitHubUsername"];
-            string token = _serverData.ServerConfig["GitHubToken"];
-            string repo = _serverData.ServerConfig["GitHubRepo"];
-            string branch = _serverData.ServerConfig["GitHubBranch"];
+            
+            // Get properties via reflection
+            var usernameProp = _serverData.GetType().GetProperty("GitHubUsername");
+            var tokenProp = _serverData.GetType().GetProperty("GitHubToken");
+            var repoProp = _serverData.GetType().GetProperty("GitHubRepo");
+            var branchProp = _serverData.GetType().GetProperty("GitHubBranch");
+            
+            string username = usernameProp?.GetValue(_serverData)?.ToString() ?? "";
+            string token = tokenProp?.GetValue(_serverData)?.ToString() ?? "";
+            string repo = repoProp?.GetValue(_serverData)?.ToString() ?? "";
+            string branch = branchProp?.GetValue(_serverData)?.ToString() ?? "main";
 
             if (string.IsNullOrEmpty(repo))
             {
@@ -231,28 +247,28 @@ namespace WindowsGSM.Plugins
             return process;
         }
 
-        public async Task<Process> Install()
+        public new async Task<Process> Install()
         {
             await InstallFromGitHub();
             return null;
         }
 
-        public async Task<string> GetLocalBuild()
+        public new async Task<string> GetLocalBuild()
         {
             return "1.0.0";
         }
 
-        public async Task<string> GetRemoteBuild()
+        public new async Task<string> GetRemoteBuild()
         {
             return "1.0.0";
         }
 
-        public bool IsInstallValid()
+        public new bool IsInstallValid()
         {
             return true;
         }
 
-        public bool IsImportValid(string path)
+        public new bool IsImportValid(string path)
         {
             return true;
         }
