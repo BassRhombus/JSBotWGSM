@@ -1,0 +1,6 @@
+C:\Users\bfjsu\Desktop\Tools\Bots\Test Bots\JSBotWGSM\obj\Debug\net6.0\DiscordBot.csproj.AssemblyReference.cache
+C:\Users\bfjsu\Desktop\Tools\Bots\Test Bots\JSBotWGSM\obj\Debug\net6.0\DiscordBot.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\bfjsu\Desktop\Tools\Bots\Test Bots\JSBotWGSM\obj\Debug\net6.0\DiscordBot.AssemblyInfoInputs.cache
+C:\Users\bfjsu\Desktop\Tools\Bots\Test Bots\JSBotWGSM\obj\Debug\net6.0\DiscordBot.AssemblyInfo.cs
+C:\Users\bfjsu\Desktop\Tools\Bots\Test Bots\JSBotWGSM\obj\Debug\net6.0\DiscordBot.csproj.CoreCompileInputs.cache
+C:\Users\bfjsu\Desktop\Tools\Bots\Test Bots\JSBotWGSM\obj\Debug\net6.0\DiscordBot.sourcelink.json

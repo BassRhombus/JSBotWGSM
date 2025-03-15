@@ -50,6 +50,9 @@ namespace WindowsGSM.Plugins
         public string GitHubRepo = "";
         public bool AutoUpdateOnRestart = false;
 
+        // Add missing ServerName property
+        public string ServerName = "Discord.js Bot";
+
         public async Task<Process> Start()
         {
             string path = ServerPath.GetServersServerFiles(_serverData.ServerID);
@@ -252,11 +255,6 @@ namespace WindowsGSM.Plugins
         public bool IsImportValid(string path)
         {
             return true;
-        }
-
-        public string GetLocalBuild()
-        {
-            return "1.0.0";
         }
 
         public async Task<object> Update()
