@@ -61,18 +61,49 @@ namespace WindowsGSM.Plugins
             // Check if directory exists
             if (!Directory.Exists(path))
             {
-                Error = $"Directory {path} does not exist";
-                return null;
+                // Create the directory if it doesn't exist
+                Directory.CreateDirectory(path);
             }
 
-            // Check if bot.js exists, if not try to pull from GitHub
-            if (!File.Exists(fullPath) && !string.IsNullOrEmpty(_serverData.GetType().GetProperty("GitHubRepo")?.GetValue(_serverData)?.ToString()))
+            // Check if bot.js exists, if not create a simple placeholder bot file
+            if (!File.Exists(fullPath))
             {
-                await InstallFromGitHub();
+                // Only try GitHub if repo is specified, otherwise create placeholder
+                if (!string.IsNullOrEmpty(_serverData.GetType().GetProperty("GitHubRepo")?.GetValue(_serverData)?.ToString()))
+                {
+                    await InstallFromGitHub();
+                }
+                else
+                {
+                    // Create a simple bot.js placeholder
+                    string simpleBotJs = @"
+console.log('Discord.js Bot initialized');
+console.log('Please replace this file with your actual bot code');
+console.log('Server is running...');
+
+// Keep the process alive
+setInterval(() => {
+    console.log('Bot is still running...');
+}, 60000);
+";
+                    File.WriteAllText(fullPath, simpleBotJs);
+                    
+                    // Create a simple package.json
+                    string packageJson = @"{
+  ""name"": ""discord-bot"",
+  ""version"": ""1.0.0"",
+  ""description"": ""Discord.js Bot"",
+  ""main"": ""bot.js"",
+  ""dependencies"": {
+    ""discord.js"": ""^14.0.0""
+  }
+}";
+                    File.WriteAllText(Path.Combine(path, "package.json"), packageJson);
+                }
             }
 
-            // Check if auto-update is enabled and update if needed
-            if (await ShouldUpdate())
+            // Skip auto-update check if GitHub details aren't provided
+            if (!string.IsNullOrEmpty(_serverData.GetType().GetProperty("GitHubRepo")?.GetValue(_serverData)?.ToString()) && await ShouldUpdate())
             {
                 await UpdateFromGitHub();
             }
@@ -97,7 +128,8 @@ namespace WindowsGSM.Plugins
                 try
                 {
                     npmProcess.Start();
-                    await npmProcess.WaitForExitAsync();
+                    // Replace WaitForExitAsync with synchronous WaitForExit inside Task.Run
+                    await Task.Run(() => npmProcess.WaitForExit());
                 }
                 catch (Exception e)
                 {
@@ -166,9 +198,9 @@ namespace WindowsGSM.Plugins
             string repo = repoProp?.GetValue(_serverData)?.ToString() ?? "";
             string branch = branchProp?.GetValue(_serverData)?.ToString() ?? "main";
 
+            // Skip if repo is empty
             if (string.IsNullOrEmpty(repo))
             {
-                Error = "GitHub repository URL is required";
                 return;
             }
 
@@ -198,7 +230,8 @@ namespace WindowsGSM.Plugins
             try
             {
                 gitProcess.Start();
-                await gitProcess.WaitForExitAsync();
+                // Replace WaitForExitAsync with synchronous WaitForExit inside Task.Run
+                await Task.Run(() => gitProcess.WaitForExit());
             }
             catch (Exception e)
             {
@@ -227,7 +260,8 @@ namespace WindowsGSM.Plugins
             try
             {
                 gitProcess.Start();
-                await gitProcess.WaitForExitAsync();
+                // Replace WaitForExitAsync with synchronous WaitForExit inside Task.Run
+                await Task.Run(() => gitProcess.WaitForExit());
             }
             catch (Exception e)
             {
@@ -249,17 +283,24 @@ namespace WindowsGSM.Plugins
 
         public new async Task<Process> Install()
         {
+            // Add await to make this properly async
             await InstallFromGitHub();
             return null;
         }
 
         public new async Task<string> GetLocalBuild()
         {
+            // Method is async but doesn't need to await anything
+            // We could change it to non-async, but keeping it async for compatibility
+            await Task.CompletedTask;
             return "1.0.0";
         }
 
         public new async Task<string> GetRemoteBuild()
         {
+            // Method is async but doesn't need to await anything
+            // We could change it to non-async, but keeping it async for compatibility
+            await Task.CompletedTask;
             return "1.0.0";
         }
 
@@ -275,6 +316,7 @@ namespace WindowsGSM.Plugins
 
         public async Task<object> Update()
         {
+            // Add await to make this properly async
             await UpdateFromGitHub();
             return null;
         }
@@ -284,11 +326,12 @@ namespace WindowsGSM.Plugins
             return new JObject
             {
                 ["ServerName"] = ServerName,
-                ["GitHubUsername"] = GitHubUsername,
-                ["GitHubToken"] = GitHubToken,
-                ["GitHubBranch"] = GitHubBranch,
-                ["GitHubRepo"] = GitHubRepo,
-                ["AutoUpdateOnRestart"] = AutoUpdateOnRestart.ToString(),
+                // Make GitHub fields optional by setting empty defaults
+                ["GitHubUsername"] = "",
+                ["GitHubToken"] = "",
+                ["GitHubBranch"] = "main",
+                ["GitHubRepo"] = "",
+                ["AutoUpdateOnRestart"] = "false",
                 ["Additional"] = Additional
             };
         }
